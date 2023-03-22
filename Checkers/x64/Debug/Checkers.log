@@ -1,0 +1,4 @@
+﻿  Pieces.cpp
+C:\Users\Oyez\Documents\C++\Checkers v0.2\Checkers\Pieces.cpp(72,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Oyez\Documents\C++\Checkers v0.2\Checkers\Pieces.cpp(94,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Checkers.vcxproj -> C:\Users\Oyez\Documents\C++\Checkers v0.2\x64\Debug\Checkers.exe

@@ -1,0 +1,69 @@
+void Pieces::pickPieces(sf::RenderWindow& window, Board& gameBoard)
+{
+	//check if lmb is pressed
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	{
+		//iterate over all pieces
+		//and check which piece was clicked
+		for (int i = 0; i < m_pieceCount; ++i)
+		{
+			//for white turn
+			if (m_turn == Pieces::color::white)
+			{
+				sf::FloatRect bound = m_whtPieceVec[i].pieceVx.getBounds();
+				if (bound.contains(static_cast<float>(sf::Mouse::getPosition(window).x),
+					static_cast<float>(sf::Mouse::getPosition(window).y)) && m_mousePressed == false)
+				{
+					m_activeTile.clear();
+					m_activeTile = m_whtPieceVec[i].pieceVx;
+					for (int j = 0; j < 4; ++j)
+					{
+						m_activeTile[j].color = sf::Color::Color(200, 100, 10);
+
+						//find the index of the tile (gameBoard.m_activeTileArr)
+						for (int k = 0; k < 32; ++k)
+						{
+							if (m_activeTile.getBounds() == gameBoard.m_activeTilesArr[k].getBounds())
+							{
+								m_whtIndex = k;
+								std::cout << "whtIndex updated: " << m_whtIndex << " \n";
+							}
+						}
+
+						m_isMoving = true;
+						m_mousePressed = true;
+					}
+
+				}
+			}
+			//for black turn
+			else if (m_turn == Pieces::color::black)
+			{
+				sf::FloatRect bound = m_blkPieceVec[i].pieceVx.getBounds();
+				if (bound.contains(static_cast<float>(sf::Mouse::getPosition(window).x),
+					static_cast<float>(sf::Mouse::getPosition(window).y)) && m_mousePressed == false)
+				{
+					m_activeTile.clear();
+					m_activeTile = m_blkPieceVec[i].pieceVx;
+					for (int j = 0; j < 4; ++j)
+					{
+						m_activeTile[j].color = sf::Color::Color(200, 100, 10);
+
+						//find the index of the tile (gameBoard.m_activeTileArr)
+						for (int k = 0; k < 32; ++k)
+						{
+							if (m_activeTile.getBounds() == gameBoard.m_activeTilesArr[k].getBounds())
+							{
+								m_blkIndex = k;
+								std::cout << "blkIndex updated: " << m_blkIndex << " \n";
+							}
+						}
+
+						m_isMoving = true;
+						m_mousePressed = true;
+					}
+				}
+			}
+		}
+	}
+}

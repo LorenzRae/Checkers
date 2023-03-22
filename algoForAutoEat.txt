@@ -1,0 +1,133 @@
+void Pieces::releasePieces(sf::RenderWindow& window, Board& board)
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+	{
+		//iterate over all tiles of board.m_activeTilesArr
+		//and check which tile was clicked
+		for (int i = 0; i < 32 ; ++i)
+		{
+			sf::Vector2f temp(80, 80);
+			sf::FloatRect bound(board.m_activeTilesArr[i][0].position, temp);
+			if (bound.contains(static_cast<float>(sf::Mouse::getPosition(window).x),
+				static_cast<float>(sf::Mouse::getPosition(window).y)) && m_mousePressed == true)
+			{
+				std::cout << "tile " << i << " \n";
+				//check which piece was previously picked
+				for (int j = 0; j < 12; ++j)
+				{
+					//algo for checking where is the piece to eat at board.m_activeTilesArr
+					int tempX = (i / 4) % 2;
+					int tempR{};
+					int tempL{};
+					if (tempX == 1)
+					{
+						tempL = 5;
+						tempR = 4;
+					}
+					else if (tempX == 0)
+					{
+						tempL = 4;
+						tempR = 3;
+					}
+					//for white piece
+					if (m_turn == Pieces::color::white)
+					{
+						if (m_activeTile.getBounds() == m_whtPieceVec[j].pieceVx.getBounds())
+						{
+							//check if a piece is eaten
+							//eaten a piece to the left
+							if (m_whtIndex - i == 9)
+							{
+								//check if a black piece is to be eaten
+								for (int k = 0; k < 12; ++k)
+								{
+									if (m_blkPieceVec[k].pieceVx.getBounds() == board.m_activeTilesArr[i + tempL].getBounds())
+									{
+										//test
+										std::cout << "tile no. " << i + tempL << " eaten\n";
+										//
+										m_blkPieceVec[k].pieceVx.clear();
+										m_blkPieceVec[k].pieceNo = NULL;
+									}
+								}
+							}
+							//eaten a piece to the right
+							else if (m_whtIndex - i == 7)
+							{
+								//check if a black piece is to be eaten
+								for (int k = 0; k < 12; ++k)
+								{
+									if (m_blkPieceVec[k].pieceVx.getBounds() == board.m_activeTilesArr[i + tempR].getBounds())
+									{
+										//test
+										std::cout << "tile no. " << i + tempR << " eaten\n";
+										//
+										m_blkPieceVec[k].pieceVx.clear();
+										m_blkPieceVec[k].pieceNo = NULL;
+									}
+								}
+							}
+
+							//move the piece to the new destination
+							m_whtPieceVec[j].pieceVx[0].position = board.m_activeTilesArr[i][0].position;
+							m_whtPieceVec[j].pieceVx[1].position = board.m_activeTilesArr[i][1].position;
+							m_whtPieceVec[j].pieceVx[2].position = board.m_activeTilesArr[i][2].position;
+							m_whtPieceVec[j].pieceVx[3].position = board.m_activeTilesArr[i][3].position;
+
+							updateActiveTile();
+							m_turn = Pieces::color::black;
+						}
+					}
+					//for black piece
+					else if (m_turn == Pieces::color::black)
+					{
+						if (m_activeTile.getBounds() == m_blkPieceVec[j].pieceVx.getBounds())
+						{
+							//check if a piece is eaten
+							//eaten a piece to the left
+							if (i - m_blkIndex == 7)
+							{
+								//check if a white piece is to be eaten
+								for (int k = 0; k < 12; ++k)
+								{
+									if (m_whtPieceVec[k].pieceVx.getBounds() == board.m_activeTilesArr[m_blkIndex + tempR].getBounds())
+									{
+										//test
+										std::cout << "tile no. " << m_blkIndex + tempR << " eaten\n";
+										//
+										m_whtPieceVec[k].pieceVx.clear();
+										m_whtPieceVec[k].pieceNo = NULL;
+									}
+								}
+							}
+							//eaten a piece to the right
+							else if (i - m_blkIndex == 9)
+							{
+								//check if a black piece is to be eaten
+								for (int k = 0; k < 12; ++k)
+								{
+									if (m_whtPieceVec[k].pieceVx.getBounds() == board.m_activeTilesArr[m_blkIndex + tempL].getBounds())
+									{
+										//test
+										std::cout << "tile no. " << m_blkIndex + tempL << " eaten\n";
+										//
+										m_whtPieceVec[k].pieceVx.clear();
+										m_whtPieceVec[k].pieceNo = NULL;
+									}
+								}
+							}
+
+							m_blkPieceVec[j].pieceVx[0].position = board.m_activeTilesArr[i][0].position;
+							m_blkPieceVec[j].pieceVx[1].position = board.m_activeTilesArr[i][1].position;
+							m_blkPieceVec[j].pieceVx[2].position = board.m_activeTilesArr[i][2].position;
+							m_blkPieceVec[j].pieceVx[3].position = board.m_activeTilesArr[i][3].position;
+
+							updateActiveTile();
+							m_turn = Pieces::color::white;
+						}
+					}
+				}
+			}
+		}
+	}
+}
